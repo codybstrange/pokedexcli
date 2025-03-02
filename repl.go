@@ -5,34 +5,23 @@ import (
   "bufio"
   "os"
   "fmt"
+  "github.com/codybstrange/pokedexcli/internal/api"
 )
 
 type cliCommand struct {
   name string
   description string
-  callback func() error
+  callback func(*config) error
 }
 
-var commandMap map[string]cliCommand
-
-func commandExit() error {
-  fmt.Printf("Closing the Pokedex... Goodbye!\n")
-  os.Exit(0)
-  return nil
+type config struct {
+  client api.Client
+  nextLocationsURL *string
+  prevLocationsURL *string
 }
 
-func commandHelp() error {
-  fmt.Printf("Welcome to the Pokedex!\n")
-  fmt.Printf("Usage:\n\n")
-  
-  for commandKey, command := range commandMap {
-    fmt.Printf("%v: %v\n", commandKey, command.description)
-  }
-  return nil
-}
-
-func initCommands() {
-  commandMap = map[string]cliCommand{
+func getCommands() map[string]cliCommand {
+  return map[string]cliCommand{
     "help": {
       name:         "help",
       description:  "Displays a help message",
@@ -43,15 +32,24 @@ func initCommands() {
       description:  "Exit the Pokedex",
       callback:     commandExit,
     },
+    "map": {
+      name:         "map",
+      description:  "Displays next 20 locations in Pokemon world",
+      callback:     commandMapF,
+    },
+    "mapb": {
+      name:         "mapb",
+      description:  "Displays the last 20 locations in Pokemon world",
+      callback:     commandMapB,
+    },
   }
-  return
 }
 
 
-func StartRepl() {
-  initCommands()
+func startRepl(cfg *config) {
   reader := bufio.NewScanner(os.Stdin)
-
+  
+  commands := getCommands()
   for ; ; {
     fmt.Printf("Pokedex > ")
     ok := reader.Scan()
@@ -65,10 +63,8 @@ func StartRepl() {
     
     commandName := words[0]
     
-    //fmt.Printf("Your command was: %s\n", commandName)
-
-    if command, found := commandMap[commandName]; found {
-      command.callback()
+    if command, found := commands[commandName]; found {
+      command.callback(cfg)
     }
 
   }
