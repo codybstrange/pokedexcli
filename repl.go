@@ -11,7 +11,7 @@ import (
 type cliCommand struct {
   name string
   description string
-  callback func(*config) error
+  callback func(*config, string) error
 }
 
 type config struct {
@@ -64,11 +64,18 @@ func startRepl(cfg *config) {
     if len(words) == 0 {
       continue
     }
-    
+   
     commandName := words[0]
+    location := ""
+    if commandName == "explore" {
+      if len(words) == 1 {
+        continue
+      }
+      location = words[1]
+    }
     
     if command, found := commands[commandName]; found {
-      command.callback(cfg)
+      command.callback(cfg, location)
     }
 
   }

@@ -4,9 +4,8 @@ import (
   "fmt"
 )
 
-func commandExplore(cfg *config) error {
-  location := "1"
-  locationResp, err := cfg.client.ListLocation(location)
+func commandExplore(cfg *config, locationName string) error {
+  locationResp, err := cfg.client.ListLocation(locationName)
 
   if err != nil {
     return err
