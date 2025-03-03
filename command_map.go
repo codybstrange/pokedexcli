@@ -6,10 +6,11 @@ import (
 )
 
 func commandMapF(cfg *config) error {
-	locationsResp, err := cfg.client.ListLocations(cfg.nextLocationsURL)
-	if err != nil {
-		return err
-	}
+  
+  locationsResp, err := cfg.client.ListLocations(cfg.nextLocationsURL)
+  if err != nil {
+    return err
+  }
 
 	cfg.nextLocationsURL = locationsResp.Next
 	cfg.prevLocationsURL = locationsResp.Previous

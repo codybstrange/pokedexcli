@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-  client := api.NewClient(5 * time.Second)
+  client := api.NewClient(5 * time.Second, 5 * time.Minute)
   cfg := &config{
     client: client,
   }
