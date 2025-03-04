@@ -2,10 +2,15 @@ package main
 
 import (
   "fmt"
+  "errors"
 )
 
-func commandExplore(cfg *config, locationName string) error {
-  locationResp, err := cfg.client.ListLocation(locationName)
+func commandExplore(cfg *config, args ...string) error {
+  if len(args) != 1 {
+    return errors.New("you must provide a location name")
+  }
+  name := args[0]
+  locationResp, err := cfg.client.GetLocation(name)
 
   if err != nil {
     return err
