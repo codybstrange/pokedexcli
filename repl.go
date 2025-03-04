@@ -18,6 +18,7 @@ type config struct {
   client api.Client
   nextLocationsURL *string
   prevLocationsURL *string
+  pokedex map[string]api.Pokemon
 }
 
 func getCommands() map[string]cliCommand {
@@ -43,12 +44,12 @@ func getCommands() map[string]cliCommand {
       callback:     commandMapB,
     },
     "explore": {
-      name:         "explore",
+      name:         "explore <location-name>",
       description:  "Display all the Pokemon located in a given location",
       callback:     commandExplore,
     },
     "catch": {
-      name:         "catch",
+      name:         "catch <pokemon-name>",
       description:  "Try to catch a given pokemon",
       callback:     commandCatch,
     },

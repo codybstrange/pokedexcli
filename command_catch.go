@@ -26,6 +26,8 @@ func commandCatch(cfg *config, args ...string) error {
   } else {
     fmt.Printf("%s escaped!\n", pokemonResp.Name)
   }
+
+  cfg.pokedex[pokemonResp.Name] = pokemonResp
   return nil
 }
 
